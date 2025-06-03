@@ -1,20 +1,32 @@
+version: '3'
+
 services:
   postgres:
-    image: postgres:latest
-    container_name: futudurable
+    image: postgres:15
+    container_name: futudurable_postgres
     environment:
-      POSTGRES_DB: futudurable
-      POSTGRES_USER: futudurable
-      POSTGRES_PASSWORD: futudurable
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U futudurable -d futudurable-db"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
 
-volumes:
-  postgres_data:
+  strapi:
+    image: strapi/strapi
+    container_name: futudurable_strapi
+    environment:
+      DATABASE_CLIENT: ${STRAPI_DATABASE_CLIENT}
+      DATABASE_HOST: ${STRAPI_DATABASE_HOST}
+      DATABASE_PORT: ${STRAPI_DATABASE_PORT}
+      DATABASE_NAME: ${STRAPI_DATABASE_NAME}
+      DATABASE_USERNAME: ${STRAPI_DATABASE_USERNAME}
+      DATABASE_PASSWORD: ${STRAPI_DATABASE_PASSWORD}
+      NODE_ENV: development
+    volumes:
+      - ./app:/srv/app
+    ports:
+      - "1337:1337"
+    depends_on:
+      - postgres
