@@ -36,6 +36,12 @@
       "type": "uid",
       "targetField": "title",
       "required": true
+    },
+    "blog_comments": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::blog-comment.blog-comment",
+      "mappedBy": "blog"
     }
   }
 }

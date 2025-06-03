@@ -17,6 +17,9 @@
     "slug": {
       "type": "uid",
       "targetField": "title"
+    },
+    "position": {
+      "type": "integer"
     }
   }
 }
